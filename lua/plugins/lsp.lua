@@ -2,16 +2,28 @@ return {
   {
     "williamboman/mason.nvim",
     opts = function(_, opts)
-      vim.list_extend(opts.ensure_installed, { "pyright", "black" })
-    end,
-  },
-
-  -- Setup null-ls with `black`
-  {
-    "jose-elias-alvarez/null-ls.nvim",
-    opts = function(_, opts)
-      local nls = require("null-ls")
-      opts.sources = vim.list_extend(opts.sources, { nls.builtins.formatting.black })
+      vim.list_extend(
+        opts.ensure_installed,
+        {
+          "pyright",
+          "angularls",
+          "csharp_ls",
+          "dockerls",
+          "bashls",
+          "gopls",
+          "helm_ls",
+          "json_ls",
+          "sqlls",
+          "terraformls",
+          "tflint",
+          "tsserver",
+          "markdownlint",
+          "prettier",
+          "yamlfmt",
+          "google-java-format",
+          "black"
+        }
+      )
     end,
   },
   {
@@ -21,6 +33,12 @@ return {
         "hcl",
         "terraform",
       },
+    },
+  },
+  {
+    "neovim/nvim-lspconfig",
+    opts = {
+      autoformat = false,
     },
   },
 }
