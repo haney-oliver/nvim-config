@@ -11,40 +11,49 @@ local plugins = {
         "grammarly-languageserver",
         "omnisharp",
         "terraform-ls",
-        "yaml-language-server",
-        "yamlfmt",
-        "circleci-yaml-language-server",
         "gopls",
         "golangci-lint",
         "golangci-lint-langserver",
+        "tailwindcss-language-server",
         "stylua",
+        "isort",
+        "prettier",
+        "typescript-language-server",
       },
     },
+    config = function()
+      require("mason").setup()
+    end,
   },
   {
-    'alexghergh/nvim-tmux-navigation',
+    "alexghergh/nvim-tmux-navigation",
     lazy = false,
     config = function()
-      local nvim_tmux_nav = require('nvim-tmux-navigation')
+      local nvim_tmux_nav = require "nvim-tmux-navigation"
 
       nvim_tmux_nav.setup {
         disable_when_zoomed = true, -- defaults to false
       }
-      vim.keymap.set('n', "<C-h>", nvim_tmux_nav.NvimTmuxNavigateLeft)
-      vim.keymap.set('n', "<C-j>", nvim_tmux_nav.NvimTmuxNavigateDown)
-      vim.keymap.set('n', "<C-k>", nvim_tmux_nav.NvimTmuxNavigateUp)
-      vim.keymap.set('n', "<C-l>", nvim_tmux_nav.NvimTmuxNavigateRight)
-      vim.keymap.set('n', "<C-\\>", nvim_tmux_nav.NvimTmuxNavigateLastActive)
-      vim.keymap.set('n', "<C-Space>", nvim_tmux_nav.NvimTmuxNavigateNext)
-    end
+      vim.keymap.set("n", "<C-h>", nvim_tmux_nav.NvimTmuxNavigateLeft)
+      vim.keymap.set("n", "<C-j>", nvim_tmux_nav.NvimTmuxNavigateDown)
+      vim.keymap.set("n", "<C-k>", nvim_tmux_nav.NvimTmuxNavigateUp)
+      vim.keymap.set("n", "<C-l>", nvim_tmux_nav.NvimTmuxNavigateRight)
+      vim.keymap.set("n", "<C-\\>", nvim_tmux_nav.NvimTmuxNavigateLastActive)
+      vim.keymap.set("n", "<C-Space>", nvim_tmux_nav.NvimTmuxNavigateNext)
+    end,
   },
   {
     "williamboman/mason-lspconfig.nvim",
     dependencies = { "williamboman/mason.nvim" },
     ensure_installed = {
-      "circleci-yaml-language-server",
-      "terraform-ls",
+      "pyright",
+      "bashls",
+      "terraformls",
+      "tsserver",
     },
+    config = function()
+      require("mason-lspconfig").setup()
+    end,
   },
   {
     "neovim/nvim-lspconfig",
@@ -113,7 +122,22 @@ local plugins = {
   },
   {
     "nvim-treesitter/nvim-treesitter",
-    opts = { ensure_installed = { "markdown", "markdown_inline", "python", "terraform", "hcl", "go" } },
+    opts = {
+      ensure_installed = {
+        "markdown",
+        "markdown_inline",
+        "python",
+        "terraform",
+        "hcl",
+        "go",
+        "tsx",
+        "toml",
+        "json",
+        "lua",
+        "css",
+        "yaml",
+      },
+    },
   },
   {
     "stevearc/conform.nvim",
@@ -124,7 +148,8 @@ local plugins = {
     cmd = { "ConformInfo" },
     opts = {},
     config = function()
-      require("conform").setup {
+      local conform = require "conform"
+      conform.setup {
         -- format_on_save = function(bufnr)
         --   if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
         --     return
@@ -133,12 +158,21 @@ local plugins = {
         -- end,
         formatters_by_ft = {
           lua = { "stylua" },
-          -- Conform will run multiple formatters sequentially
           python = { "isort", "black" },
           terraform = { "terragrunt_hclfmt" },
           tf = { "terragrunt_hclfmt" },
           hcl = { "terragrunt_hclfmt" },
-          yaml = { "yamlfmt" },
+          javascript = { "prettier" },
+          typescript = { "prettier" },
+          javascriptreact = { "prettier" },
+          typescriptreact = { "prettier" },
+          svelte = { "prettier" },
+          css = { "prettier" },
+          html = { "prettier" },
+          json = { "prettier" },
+          yaml = { "prettier" },
+          markdown = { "prettier" },
+          graphql = { "prettier" },
         },
         formattters = {
           black = {
@@ -147,17 +181,24 @@ local plugins = {
           },
         },
       }
+      vim.keymap.set({ "n", "v" }, "<leader>mp", function()
+        conform.format {
+          lsp_fallback = true,
+          async = false,
+          timeout_ms = 500,
+        }
+      end, { desc = "Format file or range (in visual mode)" })
     end,
   },
   {
-    'MeanderingProgrammer/markdown.nvim',
+    "MeanderingProgrammer/markdown.nvim",
     lazy = false,
     main = "render-markdown",
     opts = {},
-    dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.nvim' }, -- if you use the mini.nvim suite
+    dependencies = { "nvim-treesitter/nvim-treesitter", "echasnovski/mini.nvim" }, -- if you use the mini.nvim suite
     -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
     -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
-  }
+  },
 }
 
 return plugins

@@ -17,22 +17,20 @@ lspconfig.bashls.setup {
   filetypes = { "bash", "sh" },
 }
 
-lspconfig.omnisharp.setup {
-  on_attach = on_attach,
-  capabilities = capabilities,
-  filetypes = { "cs" },
-}
-
 lspconfig.terraformls.setup {
   on_attach = on_attach,
   capabilities = capabilities,
   filetypes = { "terraform", "terraform-vars", "hcl", "tf" },
 }
 
-lspconfig.yamlls.setup {
+lspconfig.tsserver.setup {
   on_attach = on_attach,
   capabilities = capabilities,
-  filetypes = { "yaml", "tpl" },
+}
+
+lspconfig.tailwindcss.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
 }
 
 lspconfig.gopls.setup {
@@ -61,3 +59,5 @@ lspconfig.golangcilsp = {
     },
   },
 }
+
+
