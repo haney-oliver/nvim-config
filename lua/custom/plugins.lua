@@ -19,6 +19,7 @@ local plugins = {
         "isort",
         "prettier",
         "typescript-language-server",
+        "clangd"
       },
     },
     config = function()
@@ -66,7 +67,7 @@ local plugins = {
       capabilities = {
         workspace = {
           didChangeWatchedFiles = {
-            dynamicRegistration = true,
+            dynamicRegistration = false,
           },
         },
       },
@@ -108,6 +109,7 @@ local plugins = {
     config = function()
       local path = "~/.local/share/nvim/mason/packages/debugpy/venv/bin/python"
       require("dap-python").setup(path)
+      require("dap-python").test_runnner = "pytest"
       require("core.utils").load_mappings "dap_python"
     end,
   },
@@ -136,6 +138,7 @@ local plugins = {
         "lua",
         "css",
         "yaml",
+        "java"
       },
     },
   },
@@ -199,6 +202,76 @@ local plugins = {
     -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
     -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
   },
+  {
+    'chipsenkbeil/distant.nvim',
+    lazy   = false,
+    branch = 'v0.3',
+    config = function()
+      require('distant').setup()
+    end
+  },
+  {
+    "nvim-java/nvim-java",
+    lazy = false,
+    dependencies = {
+      "nvim-java/lua-async-await",
+      "nvim-java/nvim-java-core",
+      "nvim-java/nvim-java-test",
+      "nvim-java/nvim-java-dap",
+      "MunifTanjim/nui.nvim",
+      "neovim/nvim-lspconfig",
+      "mfussenegger/nvim-dap",
+      {
+        "williamboman/mason.nvim",
+        opts = {
+          registries = {
+            "github:nvim-java/mason-registry",
+            "github:mason-org/mason-registry",
+          },
+        },
+      },
+    },
+    config = function()
+      require("java").setup {}
+      require("lspconfig").jdtls.setup {
+        on_attach = require("plugins.configs.lspconfig").on_attach,
+        capabilities = require("plugins.configs.lspconfig").capabilities,
+        filetypes = { "java" },
+      }
+    end,
+  },
+  {
+    "folke/snacks.nvim",
+    priority = 1000,
+    lazy = false,
+    ---@type snacks.Config
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+      bigfile = { enabled = false },
+      dashboard = { enabled = true },
+      explorer = { enabled = false },
+      indent = { enabled = true },
+      input = { enabled = true },
+      picker = { enabled = true },
+      notifier = { enabled = true },
+      quickfile = { enabled = false },
+      scope = { enabled = false },
+      scroll = { enabled = false },
+      statuscolumn = { enabled = true },
+      words = { enabled = true },
+    },
+  },
+  {
+    "folke/todo-comments.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+    }
+  }
 }
 
 return plugins

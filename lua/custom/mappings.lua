@@ -12,7 +12,14 @@ M.dap_python = {
   n = {
     ["<leader>dpr"] = {
       function()
+        require('dap-python').test_runner = "pytest"
         require('dap-python').test_method()
+      end
+    },
+    ["<leader>dpf"] = {
+      function()
+        require('dap-python').test_runner = "pytest"
+        require('dap-python').test_class()
       end
     }
   }

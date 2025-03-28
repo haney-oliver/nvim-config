@@ -5,6 +5,12 @@ local capabilities = config.capabilities
 
 local lspconfig = require "lspconfig"
 
+lspconfig.lua_ls.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+  filetypes = {"lua"}
+}
+
 lspconfig.pyright.setup {
   on_attach = on_attach,
   capabilities = capabilities,
@@ -23,7 +29,7 @@ lspconfig.terraformls.setup {
   filetypes = { "terraform", "terraform-vars", "hcl", "tf" },
 }
 
-lspconfig.tsserver.setup {
+lspconfig.ts_ls.setup {
   on_attach = on_attach,
   capabilities = capabilities,
 }
@@ -60,4 +66,8 @@ lspconfig.golangcilsp = {
   },
 }
 
+lspconfig.clangd.setup {
+  on_attach = on_attach,
+  capabilities = capabilities
+}
 
